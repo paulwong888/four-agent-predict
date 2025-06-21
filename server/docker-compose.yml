@@ -1,0 +1,62 @@
+version: '3'
+services:
+  n8n:
+    image: n8nio/n8n
+    # image: docker.n8n.io/n8nio/n8n
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+      - "5680:5680"
+    environment:
+      - TZ=Asia/Shanghai                  # 时区设置
+      - GENERIC_TIMEZONE=Asia/Shanghai    # 兼容旧版时区设置
+      - N8N_BASIC_AUTH_ACTIVE=true        # 启用基础认证
+      - N8N_BASIC_AUTH_USER=admin         # 用户名
+      - N8N_BASIC_AUTH_PASSWORD=abcd2025#  # 密码（自行修改）
+      - N8N_SECURE_COOKIE=false
+      - N8N_DEFAULT_LOCALE=zh-CN          # 强制中文界面（）
+      - N8N_HOST=192.168.0.102           # 强制中文界面（）
+      - DB_TYPE=postgresdb                # 使用 PostgreSQL（推荐生产环境）
+      - DB_POSTGRESDB_DATABASE=n8n_db     # 数据库名
+      - DB_POSTGRESDB_USER=n8n_user       # 数据库用户
+      - DB_POSTGRESDB_PASSWORD=n8n_pass   # 数据库密码（自行修改）
+      - DB_POSTGRESDB_HOST=db             # 数据库服务名（对应下方服务）
+    depends_on:
+      - db
+    volumes:
+      - n8n_data:/home/node/.n8n          # 持久化配置和数据
+      - n8n_ui_data:/usr/local/lib/node_modules/n8n/node_modules/n8n-editor-ui/dist
+
+  db:
+    image: postgres:14
+    container_name: n8n_db
+    restart: unless-stopped
+    # ports:
+    #   - "5432:5432"
+    environment:
+      - POSTGRES_USER=n8n_user
+      - POSTGRES_PASSWORD=n8n_pass
+      - POSTGRES_DB=n8n_db
+    volumes:
+      - pg_data:/var/lib/postgresql/data  # 持久化数据库
+
+volumes:
+  n8n_data: 
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./n8n/data
+  n8n_ui_data: 
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./n8n/editor-ui-dist
+  pg_data: 
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./postgres/data

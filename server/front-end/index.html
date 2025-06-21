@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket示例</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div>
+        <p>连接状态：<span id="status">未连接</span></p>
+        <input type="text" id="messageInput" placeholder="输入消息">
+        <button onclick="sendMessage()">发送</button>
+        <button onclick="closeConnection()">关闭连接</button>
+    </div>
+    <div id="messages" style="margin-top:20px; border:1px solid #ccc; padding:10px;"></div>
+
+    <script>
+        // 使用公共测试服务器（可替换为你的WS地址）
+        // const ws = new WebSocket("wss://echo.websocket.org");
+        const ws = new WebSocket("ws://121.43.138.101:5680/ws");
+        const statusSpan = document.getElementById('status');
+        const messagesDiv = document.getElementById('messages');
+        const inputEl = document.getElementById('messageInput');
+
+        // 连接建立时触发
+        ws.onopen = function(event) {
+            statusSpan.textContent = '已连接';
+            statusSpan.style.color = 'green';
+            logMessage('系统：连接已建立');
+        };
+
+        // 接收消息时触发
+        ws.onmessage = function(event) {
+            logMessage('服务器：' + event.data);
+        };
+
+        // 连接关闭时触发
+        ws.onclose = function(event) {
+            statusSpan.textContent = '已断开';
+            statusSpan.style.color = 'red';
+            logMessage('系统：连接已关闭');
+        };
+
+        // 错误处理
+        ws.onerror = function(error) {
+            logMessage('错误：' + error);
+        };
+
+        // 发送消息
+        function sendMessage() {
+            if (inputEl.value.trim()) {
+                logMessage('我：' + inputEl.value);
+                ws.send(inputEl.value);
+                inputEl.value = '';
+            }
+        }
+
+        // 关闭连接
+        function closeConnection() {
+            ws.close();
+        }
+
+        // 消息显示辅助函数
+        function logMessage(msg) {
+            const p = document.createElement('p');
+            p.textContent = msg;
+            messagesDiv.appendChild(p);
+        }
+
+        // 回车发送消息
+        inputEl.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>

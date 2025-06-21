@@ -1,0 +1,22 @@
+version: '3'
+services:
+  individial_db:
+    image: postgres:14
+    container_name: individial_db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=paul
+      - POSTGRES_PASSWORD=n8n_pass_!
+      - POSTGRES_DB=paul_db
+    volumes:
+      - pg_data:/var/lib/postgresql/data  # 持久化数据库
+
+volumes:
+  pg_data: 
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data
