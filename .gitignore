@@ -1,4 +1,6 @@
 single-db/data
+01_single-db/data
 server/n8n/data
 server/postgres/data
 server/n8n/editor-ui-dist
+02_cloudbeaver/workspace
