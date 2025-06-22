@@ -1,6 +1,6 @@
-single-db/data
+02_single-db/data
 01_single-db/data
-server/n8n/data
-server/postgres/data
-server/n8n/editor-ui-dist
-02_cloudbeaver/workspace
+01_n8n_server/n8n/data
+01_n8n_server/postgres/data
+01_n8n_server/n8n/editor-ui-dist
+03_cloudbeaver/workspace
