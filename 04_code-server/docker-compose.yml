@@ -1,0 +1,11 @@
+services:
+  code-server:
+      image: codercom/code-server:latest
+      container_name: code-server
+      ports:
+        - "8080:8080"
+      volumes:
+        - ./data/.config/code-server:/home/coder/.config/code-server
+        - /home/paul/workspaces:/home/coder/project
+      environment:
+        - PASSWORD=asb!123

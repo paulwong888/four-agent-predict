@@ -1,6 +1,7 @@
 services: 
   cloudbeaver:
     image: dbeaver/cloudbeaver:latest  
+    container_name: cloudbeaver
     ports:
       - "8978:8978"  
     volumes:
