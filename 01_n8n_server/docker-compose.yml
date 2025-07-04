@@ -1,4 +1,4 @@
-version: '3'
+# version: '3'
 services:
   n8n:
     image: n8nio/n8n
@@ -18,18 +18,20 @@ services:
       - N8N_DEFAULT_LOCALE=zh-CN          # 强制中文界面（）
       - N8N_HOST=47.121.28.134           # 强制中文界面（）
       - DB_TYPE=postgresdb                # 使用 PostgreSQL（推荐生产环境）
+      - DB_POSTGRESDB_HOST=n8n_db         # 数据库服务名（对应下方服务）
       - DB_POSTGRESDB_DATABASE=n8n_db     # 数据库名
       - DB_POSTGRESDB_USER=n8n_user       # 数据库用户
       - DB_POSTGRESDB_PASSWORD=n8n_pass   # 数据库密码（自行修改）
-      - DB_POSTGRESDB_HOST=db             # 数据库服务名（对应下方服务）
     depends_on:
-      - db
+      - n8n_db
     volumes:
-      - n8n_data:/home/node/.n8n          # 持久化配置和数据
+      - n8n_data:/home/node/.n8n                      # 持久化配置和数据
+      - n8n_test_files:/home/paul/n8n_test_files      # 持久化配置和数据
       - n8n_ui_data:/usr/local/lib/node_modules/n8n/node_modules/n8n-editor-ui/dist
 
-  db:
-    image: postgres:14
+  n8n_db:
+    # image: postgres:14
+    image: pgvector/pgvector:pg14
     container_name: n8n_db
     restart: unless-stopped
     # ports:
@@ -48,6 +50,12 @@ volumes:
       type: none
       o: bind
       device: ./n8n/data
+  n8n_test_files: 
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./n8n/test-files
   n8n_ui_data: 
     driver: local
     driver_opts:

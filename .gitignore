@@ -1,6 +1,8 @@
 02_single-db/data
 01_single-db/data
 01_n8n_server/n8n/data
+01_n8n_server/n8n/test-files
 01_n8n_server/postgres/data
 01_n8n_server/n8n/editor-ui-dist
 03_cloudbeaver/workspace
+01_n8n_server/mysql-data
