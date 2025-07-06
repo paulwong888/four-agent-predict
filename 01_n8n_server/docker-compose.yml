@@ -42,6 +42,29 @@ services:
       - POSTGRES_DB=n8n_db
     volumes:
       - pg_data:/var/lib/postgresql/data  # 持久化数据库
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U n8n_user -d n8n_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    # platform: linux/arm64
+    restart: unless-stopped
+    ports:
+      - "3000:8080"
+    # environment:
+      # - OPEN_WEBUI_API_URL=http://n8n:5678        # n8n接口地址
+      # - DATABASE_URL=postgresql://n8n_user:n8n_pass@n8n_db:5432/open_webui  # PostgreSQL连接
+    volumes:
+      - ./open-webui/data:/app/backend/data
+    depends_on:
+      n8n_db:
+        condition: service_healthy  # 等待数据库就绪
+      n8n:
+        condition: service_started
 
 volumes:
   n8n_data: 
