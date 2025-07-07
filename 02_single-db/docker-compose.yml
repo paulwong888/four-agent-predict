@@ -13,6 +13,23 @@ services:
       - POSTGRES_DB=paul_db
     volumes:
       - pg_data:/var/lib/postgresql/data  # 持久化数据库
+    networks:
+      - n8n_network
+
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: paulwong888@163.com
+      PGADMIN_DEFAULT_PASSWORD: aab2025!
+    ports:
+      - "5050:80"
+    networks:
+      - n8n_network
+
+networks:
+  n8n_network:
+    driver: bridge
 
 volumes:
   pg_data: 
