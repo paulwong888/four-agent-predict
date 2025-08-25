@@ -1,0 +1,45 @@
+{
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "GET",
+          "path": "stream-data",
+          "responseMode": "onReceived",
+          "options": {
+            "rawBody": true,
+            "respondWithBody": true
+          }
+        },
+        "name": "Webhook",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 1,
+        "position": [250, 300]
+      },
+      {
+        "parameters": {
+          "functionCode": "// 获取Express的response对象\nconst res = $.response;\n\n// 设置流式响应头\nres.setHeader('Content-Type', 'text/event-stream');\nres.setHeader('Transfer-Encoding', 'chunked');\n\n// 创建分块发送函数\nconst sendChunk = (data, delay) => {\n  return new Promise(resolve => {\n    setTimeout(() => {\n      res.write(`data: ${JSON.stringify(data)}\\n\\n`);\n      resolve();\n    }, delay);\n  });\n};\n\n// 异步发送多个数据块\n(async () => {\n  try {\n    await sendChunk({ message: '第一个数据块', timestamp: Date.now() }, 1000);\n    await sendChunk({ message: '第二个数据块', progress: 50 }, 1000);\n    await sendChunk({ message: '最终数据块', status: 'complete' }, 1000);\n  } catch (error) {\n    console.error('流式传输错误:', error);\n  } finally {\n    res.end();\n  }\n})();\n\nreturn null;"
+        },
+        "name": "Function",
+        "type": "n8n-nodes-base.function",
+        "typeVersion": 1,
+        "position": [450, 300]
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Function",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionTimeout": 3600
+    }
+  }
+  

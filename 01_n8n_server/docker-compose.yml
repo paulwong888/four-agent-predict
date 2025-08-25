@@ -1,7 +1,8 @@
 # version: '3'
 services:
   n8n:
-    image: n8nio/n8n
+    image: n8nio/n8n:1.107.4
+    # image: n8nio/n8n
     # image: docker.n8n.io/n8nio/n8n
     container_name: n8n
     restart: unless-stopped
@@ -99,7 +100,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ./n8n/editor-ui-dist
+      device: ./n8n/data-ui/dist-n8n@1.107.4
   pg_data: 
     driver: local
     driver_opts:
