@@ -78,6 +78,8 @@ services:
       #   condition: service_healthy  # 等待数据库就绪
       n8n:
         condition: service_started
+
+#单独命名为n8n_network, 如不命名则默认为01_n8n_server_n8n_network        
 networks:
   n8n_network:
     driver: bridge
