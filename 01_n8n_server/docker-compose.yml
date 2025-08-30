@@ -81,6 +81,7 @@ services:
 networks:
   n8n_network:
     driver: bridge
+    name: n8n_network
 
 volumes:
   n8n_data: 
