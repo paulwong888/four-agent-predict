@@ -1,7 +1,8 @@
 # version: '3'
 services:
   n8n:
-    image: n8nio/n8n:1.107.4
+    # image: n8nio/n8n:1.118.2
+    image: n8nio/n8n:1.120.4
     # image: n8nio/n8n
     # image: docker.n8n.io/n8nio/n8n
     container_name: n8n
@@ -21,6 +22,7 @@ services:
       - N8N_RUNNERS_ENABLED=true
 
       - DB_TYPE=sqlite
+      - DB_SQLITE_POOL_SIZE=5
       - DB_SQLITE_VOLUME_LOCATION=/home/node/.n8n
       - DB_SQLITE_DATABASE=n8n.sqlite
 
@@ -103,7 +105,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ./n8n/data-ui/dist-n8n@1.107.4
+      device: ./n8n/data-ui/dist-n8n@1.120.4
   pg_data: 
     driver: local
     driver_opts:

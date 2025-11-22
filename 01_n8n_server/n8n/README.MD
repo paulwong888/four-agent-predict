@@ -12,4 +12,6 @@ n8n import:workflow --input=/home/node/.n8n/backup/export-all-workflows.json
 导入用户名及密码命令:
 n8n import:credentials --input=/home/node/.n8n/backup/export-all-credentials.json
 
+中文包:
+https://github.com/other-blowsnow/n8n-i18n-chinese/releases
 ```
